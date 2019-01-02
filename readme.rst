@@ -5,7 +5,7 @@ A python module for building curriculum vitae and other documents from a ``bibte
 
 I hate formatting citations. It's tedious, and error-prone. Further, when I build my CV, I tend to muck it up and leave something out, mis-sort it, duplicate it accidentally, etc. So, I need a tool to do a better job.
 
-The first function here, ``makemycv``, will take a few arguments and put sorted ``\bibentry`` commands into ``.tex`` files with names corresponding to `BibTeX entry <https://en.wikibooks.org/wiki/LaTeX/Bibliography_Management#BibTeX>`_` types. In doing so, you can then simply use an ``\input`` command to embed all of these citations right in your document in an enumerated environment.
+The first function here, ``makemycv``, will take a few arguments and put sorted ``\bibentry`` commands into ``.tex`` files with names corresponding to `BibTeX entry <https://en.wikibooks.org/wiki/LaTeX/Bibliography_Management#BibTeX>`_ types. In doing so, you can then simply use an ``\input`` command to embed all of these citations right in your document in an enumerated environment.
 
 Right now, it only works for a ``bib`` file containing only papers of the CV-writer. I'll fix that eventually.
 
@@ -53,7 +53,7 @@ If you don't use LaTeX, this isn't easy enough for you yet. It's a long ways awa
 Future plans
 ------------
 
-1. Let LaTeX format, then use (internally) `pandoc <http://pandoc.org>`_ to convert citations, and only citations, to any format you want- html, .docx, Markdown, etc.. I just need time to write some parsing scripts. This would have to check for pandoc and balk- leaving users without pandoc to get it installed. 
+1. Let LaTeX format, then use (internally) `pandoc <http://pandoc.org>`_ to convert citations, and only citations, to any format you want- html, .docx, Markdown, etc.. I just need time to write some parsing scripts. This would have to check for pandoc and balk- leaving users without pandoc to get it installed.
 
 2. Select only article by a specified author (could be a bit dangerous as names aren't as unique as one would think, and this could be error prone/difficult).
 
