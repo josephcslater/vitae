@@ -1,4 +1,4 @@
-[![Downloads](https://pepy.tech/badge/vitae)](https://pepy.tech/project/vitae)
+`Downloads <https://pepy.tech/badge/vitae)](https://pepy.tech/project/vitae>`_
 
 vitae
 =====
