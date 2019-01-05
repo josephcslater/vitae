@@ -1,5 +1,8 @@
-`Downloads <https://pepy.tech/badge/vitae)](https://pepy.tech/project/vitae>`_
 
+.. image:: http://pepy.tech/badge/vitae
+   :target: http://pepy.tech/project/vitae
+   :alt: PyPi Download stats
+   
 vitae
 =====
 
