@@ -1,3 +1,5 @@
+[![Downloads](https://pepy.tech/badge/vitae)](https://pepy.tech/project/vitae)
+
 vitae
 =====
 
@@ -25,7 +27,7 @@ You'll need the following in the header of your LaTeX cv file.
   \usepackage[colorlinks=true]{hyperref}
   \makeatletter\let\@bibitem\saved@bibitem\makeatother
 
-The last 3 lines are only necessary if you want to use the ``hyperref`` package, which has some compatibility issues with bibentry. 
+The last 3 lines are only necessary if you want to use the ``hyperref`` package, which has some compatibility issues with bibentry.
 
 Then put:
 
