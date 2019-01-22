@@ -2,7 +2,7 @@
 .. image:: http://pepy.tech/badge/vitae
    :target: http://pepy.tech/project/vitae
    :alt: PyPi Download stats
-   
+
 vitae
 =====
 
@@ -56,6 +56,12 @@ b. Please provide your feedback.
 c. Please help! I can use help with additional portions.
 
 If you don't use LaTeX, this isn't easy enough for you yet. It's a long ways away. However, texblog_ has a decent start in writing a `Résumé in LaTeX`_ . It *doesn't* include the paper inclusion trick being used by ``vitae``.
+
+Release notes:
+--------------
+
+0.1.1: You can now select only bibentries by a defined author. Note that authornames are not always all that unique. You need to ensure that all authornames are perfect for the selected author. That means initials, etc. I hope to use fuzzywuzzy for this someday- it's a bit complicated and a judgement call.  
+
 
 Future plans
 ------------

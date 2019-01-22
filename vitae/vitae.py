@@ -41,7 +41,11 @@ def makemycv(filename='cv.bib',
 
     bibs = bib_database.entries
 
+    if author is not None:
+        bibs = by_author(author, bibs)
+
     results = {}
+
     for entrytype in entrytypes:
         entry = [[bib['year'], bib['ID'], bib['title']]
                  for bib in bibs if bib['ENTRYTYPE'] == entrytype]
@@ -81,3 +85,16 @@ def makemycv(filename='cv.bib',
                   '\n    ', bib['title'])
 
     return results, unaccounted
+
+
+def by_author(authorname, bibs):
+    """Return only bibs containing authorname."""
+    keepindex = []
+    i = 0
+    for bib in bibs:
+
+        if 'author' in bib and authorname in bib['author']:
+            keepindex.append(i)
+            i += 1
+    author_bibs = [bibs[i] for i in keepindex]
+    return author_bibs
