@@ -68,7 +68,7 @@ Future plans
 
 1. Let LaTeX do formatting, then use (internally) pandoc_ to convert citations, and only citations, to any format you want- html, .docx, Markdown, etc.. I just need time to write some parsing scripts. This would have to check for pandoc_ and balk- leaving users without pandoc_ to get it installed.
 
-2. Select only article by a specified author (could be a bit dangerous as names aren't as unique as one would think, and this could be error prone/difficult).
+2. Smarter name selection- incorporate fuzzywuzzy. 
 
 3. "dump formatted reverences", with a specificity on number and type.
 
