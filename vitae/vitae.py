@@ -91,10 +91,30 @@ def by_author(authorname, bibs):
     """Return only bibs containing authorname."""
     keepindex = []
     i = 0
+
+    an = authorname.replace(" ", "")
+
+    authorname = authorname.replace(',', ', ')
+    authorname = authorname.replace("  ", " ")
+
+    authorshort = 'xxxxxxx'
+    if ',' in authorname and len(an) > (1+an.find(',')):
+        authorshort = (authorname[:authorname.find(',')]
+                       + ', '
+                       + an[an.find(',')+1])
+
     for bib in bibs:
 
-        if 'author' in bib and authorname in bib['author']:
-            keepindex.append(i)
-            i += 1
+        if 'author' in bib:
+            bibauthor = bib['author']
+            bibauthor = bibauthor.replace(',', ', ')
+            bibauthor = bibauthor.replace('  ', ' ')
+
+            if authorname in bibauthor:
+                keepindex.append(i)
+                i += 1
+            elif authorshort in bibauthor:
+                print('Close name WARNING- is bib entry correct?')
+                print(bib['author'], ': ', bib['title'])
     author_bibs = [bibs[i] for i in keepindex]
     return author_bibs
