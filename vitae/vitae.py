@@ -131,6 +131,11 @@ def replace_enquote(string):
 
 def read_bbl(bblfilename):
     """Read bbl file and return dictionary of formatted citations."""
+    if not is_tool('pdflatex') or not is_tool('bibtex'):
+        print("Both pdflatex and bibtex must exist on your command",
+              " line to use this function.")
+        return
+
     isbibtext = 0
     formattedbibs = {}
     with open(bblfilename) as bbl:
@@ -180,14 +185,11 @@ def make_bbl_file(bibfile, bibliographystyle='plain'):
             \documentclass[12pt, letter]{article}
             \usepackage[utf8]{inputenc}
             \usepackage[T1]{fontenc}
-
-            % https://tex.stackexchange.com/questions/387937/bibentry-with-template-causes-error-lonely-item-perhaps-a-missing-list-enviro?noredirect=1&lq=1
             \usepackage{bibentry}
             \newcommand{\enquote}[1]{``#1''}
             \makeatletter\let\saved@bibitem\@bibitem\makeatother
             \usepackage[colorlinks=true]{hyperref}
             \makeatletter\let\@bibitem\saved@bibitem\makeatother
-
             \usepackage{url}{}
             \renewcommand{\cite}{\bibentry}
             \begin{document}
@@ -213,3 +215,12 @@ def make_bbl_file(bibfile, bibliographystyle='plain'):
         formattedbibs = read_bbl(os.path.join(tmpdirname, 'cv_temp.bbl'))
         os.chdir(old_directory)
     return formattedbibs
+
+
+def is_tool(name):
+    """Check whether `name` is on PATH and marked as executable."""
+
+    # from whichcraft import which
+    from shutil import which
+
+    return which(name) is not None
