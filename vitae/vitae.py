@@ -159,28 +159,32 @@ def read_bbl(bblfilename):
     return formattedbibs
 
 
-def make_bbl_file(bibfile, bibliographystyle='plain'):
-    """Make a formatted bbl file from a .bib file- return the location.
+def formatted_bibs(bibfile, bibliographystyle='plain'):
+    """Make a dictionary of formatted bibs.
 
-    Inputs
-    ------
+    Parameters
+    ----------
     bibfile : string
         full path and file name to the .bib file
+    bibliographystyle : string (optional)
+        bst (bib style file) to use. Default: 'plain'
 
     Returns
     -------
     formattedbibs : dictionary of strings
-        dictionary of formatted citations with bib_labels as keys.
+        dictionary of formatted citations with Cite keys as keys.
 
     """
     path = os.path.dirname(bibfile)
     os.path.basename(bibfile)
 
+    bibliographystyle = bibliographystyle.replace('.bst', '')
+
     with tempfile.TemporaryDirectory() as tmpdirname:
         old_directory = os.getcwd()
         with open(os.path.join(tmpdirname, 'cv_temp.tex'), 'w') as template:
             # template_head = 'string'
-            print(bibfile)
+            # print(bibfile)
             template_head = (r"""% !TEX root = cv.tex
             \documentclass[12pt, letter]{article}
             \usepackage[utf8]{inputenc}
@@ -209,7 +213,7 @@ def make_bbl_file(bibfile, bibliographystyle='plain'):
             template.write(template_head)
 
         os.chdir(tmpdirname)
-        makemycv(filename=bibfile)
+        makemycv(filename=bibfile, silent=True)
         os.system("pdflatex cv_temp")
         os.system("bibtex cv_temp")
         formattedbibs = read_bbl(os.path.join(tmpdirname, 'cv_temp.bbl'))
@@ -219,8 +223,5 @@ def make_bbl_file(bibfile, bibliographystyle='plain'):
 
 def is_tool(name):
     """Check whether `name` is on PATH and marked as executable."""
-
-    # from whichcraft import which
     from shutil import which
-
     return which(name) is not None
