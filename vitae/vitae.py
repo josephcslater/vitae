@@ -1,6 +1,7 @@
 import bibtexparser
 import tempfile
 from bibtexparser.bparser import BibTexParser
+from bibtexparser.customization import homogenize_latex_encoding
 import os
 
 
@@ -17,7 +18,7 @@ def makemycv(filename='cv.bib',
     ----------
     filename : string (optional: default cv.tex)
         Name (including optional path) of bib file containing citation entries
-    entrytypes : list of strings (optional)
+    entrytypes : tuple of strings (optional)
         List of bibtex entrytypes to generate \\bibentry .tex files for.
         Files will be be named  `entrytype```.tex``
     writeout : boolean (optional: default True)
@@ -35,6 +36,7 @@ def makemycv(filename='cv.bib',
         return
 
     parser = BibTexParser()
+    parser.customization = homogenize_latex_encoding
     parser.ignore_nonstandard_types = False
 
     with open(filename) as bibtex_file:
@@ -225,3 +227,27 @@ def is_tool(name):
     """Check whether `name` is on PATH and marked as executable."""
     from shutil import which
     return which(name) is not None
+
+
+def _merge_formatted_into_db(formatted_bibs, bibfilename):
+    """Create bib database including formated bibs."""
+    if os.path.isfile(bibfilename) is False:
+        print('{} is not an actual bib file.')
+        return
+
+    parser = BibTexParser()
+    parser.ignore_nonstandard_types = False
+
+    with open(bibfilename) as bibtex_file:
+        bib_database = bibtexparser.load(bibtex_file, parser)
+
+    bibs = bib_database.entries
+
+    bib_database = [[bib['year'],
+                     bib['ID'],
+                     bib['title'],
+                     bib['ENTRYTYPE'],
+                     formatted_bibs[bib['ID']]]
+                    for bib in bibs if bib['ID'] in formatted_bibs.keys()]
+
+    return bib_database
