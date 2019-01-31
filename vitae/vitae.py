@@ -1,4 +1,5 @@
 import bibtexparser
+import tempfile
 from bibtexparser.bparser import BibTexParser
 import os
 
@@ -118,3 +119,97 @@ def by_author(authorname, bibs):
                 print(bib['author'], ': ', bib['title'])
     author_bibs = [bibs[i] for i in keepindex]
     return author_bibs
+
+
+def replace_enquote(string):
+    r"""Replace \enquote with proper quotes."""
+    front = string[:string.find(r'\enquote{')]
+    back = string[string.find(r'\enquote{'):].replace('}', "''", 1)
+    back = back.replace(r'\enquote{', '``')
+    return front + back
+
+
+def read_bbl(bblfilename):
+    """Read bbl file and return dictionary of formatted citations."""
+    isbibtext = 0
+    formattedbibs = {}
+    with open(bblfilename) as bbl:
+        for line in bbl:
+            if line[:6] == r'\begin' or line[:4] == r'\end':
+                pass
+            elif r'\providecommand' in line:
+                pass
+            elif r'bibitem' in line:
+                bibitem = line[line.find('{')+1: line.find('}')]
+                isbibtext = 1
+                bibtext = ''
+            elif isbibtext == 1:
+                if len(line) > 2:
+                    bibtext += line.strip('\n')
+                elif len(line) < 2:
+                    bibtext = replace_enquote(bibtext)
+                    formattedbibs[bibitem] = bibtext
+                    isbibtext = 0
+
+    return formattedbibs
+
+
+def make_bbl_file(bibfile, bibliographystyle='plain'):
+    """Make a formatted bbl file from a .bib file- return the location.
+
+    Inputs
+    ------
+    bibfile : string
+        full path and file name to the .bib file
+
+    Returns
+    -------
+    formattedbibs : dictionary of strings
+        dictionary of formatted citations with bib_labels as keys.
+
+    """
+    path = os.path.dirname(bibfile)
+    os.path.basename(bibfile)
+
+    with tempfile.TemporaryDirectory() as tmpdirname:
+        old_directory = os.getcwd()
+        with open(os.path.join(tmpdirname, 'cv_temp.tex'), 'w') as template:
+            # template_head = 'string'
+            print(bibfile)
+            template_head = (r"""% !TEX root = cv.tex
+            \documentclass[12pt, letter]{article}
+            \usepackage[utf8]{inputenc}
+            \usepackage[T1]{fontenc}
+
+            % https://tex.stackexchange.com/questions/387937/bibentry-with-template-causes-error-lonely-item-perhaps-a-missing-list-enviro?noredirect=1&lq=1
+            \usepackage{bibentry}
+            \newcommand{\enquote}[1]{``#1''}
+            \makeatletter\let\saved@bibitem\@bibitem\makeatother
+            \usepackage[colorlinks=true]{hyperref}
+            \makeatletter\let\@bibitem\saved@bibitem\makeatother
+
+            \usepackage{url}{}
+            \renewcommand{\cite}{\bibentry}
+            \begin{document}
+            \nobibliography{"""
+            + bibfile
+            + r"""}
+            \bibliographystyle{"""
+            + bibliographystyle
+            + r"""}
+            \pagestyle{plain}
+            \input{article.tex}
+            \input{inbook.tex}
+            \input{inproceedings}
+            \input{periodical}
+            \input{techreport}
+            \end{document}""")
+            template.write(template_head)
+
+        os.chdir(tmpdirname)
+        makemycv(filename=bibfile)
+        os.system("pdflatex cv_temp")
+        os.system("bibtex cv_temp")
+        formattedbibs = read_bbl(os.path.join(tmpdirname, 'cv_temp.bbl'))
+        os.chdir(old_directory)
+    return formattedbibs
