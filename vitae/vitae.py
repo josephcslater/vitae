@@ -1,3 +1,5 @@
+"""Create citation files from a bib file."""
+
 import bibtexparser
 import tempfile
 from bibtexparser.bparser import BibTexParser
@@ -12,14 +14,14 @@ def makemycv(filename='cv.bib',
              writeout=True,
              indent='   ',
              author=None):
-    """Create sub-bib TeX files for including into CV.
+    r"""Create sub-bib TeX files for including into CV.
 
     Parameters
     ----------
     filename : string (optional: default cv.tex)
         Name (including optional path) of bib file containing citation entries
     entrytypes : tuple of strings (optional)
-        List of bibtex entrytypes to generate \\bibentry .tex files for.
+        List of bibtex entrytypes to generate \bibentry .tex files for.
         Files will be be named  `entrytype```.tex``
     writeout : boolean (optional: default True)
         Write to files. If false, only write to screenself.
@@ -180,15 +182,15 @@ def formatted_bibs(bibfile, bibliographystyle='plain'):
         bibfile array from bibtexparser
 
     """
-    path = os.path.dirname(bibfile)
-    bibfilename = os.path.basename(bibfile)
+#     path = os.path.dirname(bibfile)
+#     bibfilename = os.path.basename(bibfile)
 
     bibliographystyle = bibliographystyle.replace('.bst', '')
     old_directory = os.getcwd()
 
     with tempfile.TemporaryDirectory() as tmpdirname:
         os.chdir(tmpdirname)
-        with open('cv_temp.tex','w') as template:
+        with open('cv_temp.tex', 'w') as template:
             # template.write('hello')
             template_head = (r"""% !TEX root = cv.tex
             \documentclass[12pt, letter]{article}
@@ -203,11 +205,11 @@ def formatted_bibs(bibfile, bibliographystyle='plain'):
             \renewcommand{\cite}{\bibentry}
             \begin{document}
             \nobibliography{"""
-            + bibfile
-            + r"""}
+                             + bibfile
+                             + r"""}
             \bibliographystyle{"""
-            + bibliographystyle
-            + r"""}
+                             + bibliographystyle
+                             + r"""}
             \pagestyle{plain}
             \input{article.tex}
             \input{inbook.tex}
@@ -234,8 +236,6 @@ def is_tool(name):
 
 def merge_formatted_into_db(formattedbibs, bibfilename=None, bibs=None):
     """Create bib database including formated bibs."""
-
-
     if bibs is None:
         if bibfilename is None:
             print('No bib file name given.')
@@ -246,6 +246,7 @@ def merge_formatted_into_db(formattedbibs, bibfilename=None, bibs=None):
             return
 
         parser = BibTexParser()
+        parser.customization = homogenize_latex_encoding
         parser.ignore_nonstandard_types = False
 
         with open(bibfilename) as bibtex_file:
@@ -382,7 +383,8 @@ def write_bibs(bibfile=None,
 
     # 2. Truncate older articles
     if since_year is not None:
-        bibs_truncated = [bib for bib in bibs_sorted if int(bib[0]) >= since_year]
+        bibs_truncated = [bib for bib in bibs_sorted
+                          if int(bib[0]) >= since_year]
     else:
         bibs_truncated = bibs_sorted
 
