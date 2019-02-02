@@ -30,6 +30,15 @@ def makemycv(filename='cv.bib',
     author : string (unimplemented)
         select authors whose entries should be included.
 
+    Returns
+    -------
+    results : strings
+        Content(s) of each .tex file generated- in case you want them.
+    unaccounted : array
+        Array of bib entries not used in creation of the output.
+    bibs : array
+        Full array created by bibtexparser.
+
     https://nwalsh.com/tex/texhelp/bibtx-7.html
 
     """
