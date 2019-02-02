@@ -36,7 +36,7 @@ setup(name='vitae',
                     '': ['readme.rst']},
       long_description=read('readme.rst'),
       keywords=['curriculum vitae', 'academia', 'cv', 'resume'],
-      install_requires=['bibtexparser', 'tempfile'],
+      install_requires=['bibtexparser'],
       include_package_data=True
       )
 

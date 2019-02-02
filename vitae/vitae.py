@@ -232,19 +232,27 @@ def is_tool(name):
     return which(name) is not None
 
 
-def merge_formatted_into_db(formattedbibs, bibfilename):
+def merge_formatted_into_db(formattedbibs, bibfilename=None, bibs=None):
     """Create bib database including formated bibs."""
-    if os.path.isfile(bibfilename) is False:
-        print('{} is not an actual bib file.')
-        return
 
-    parser = BibTexParser()
-    parser.ignore_nonstandard_types = False
 
-    with open(bibfilename) as bibtex_file:
-        bib_database = bibtexparser.load(bibtex_file, parser)
+    if bibs is None:
+        if bibfilename is None:
+            print('No bib file name given.')
+            return
 
-    bibs = bib_database.entries
+        if os.path.isfile(bibfilename) is False or 'bib' not in bibfilename:
+            print('{} is not an actual bib file.')
+            return
+
+        parser = BibTexParser()
+        parser.ignore_nonstandard_types = False
+
+        with open(bibfilename) as bibtex_file:
+            bib_database = bibtexparser.load(bibtex_file, parser)
+
+        bibs = bib_database.entries
+
     bib_database = [[bib['year'],
                      bib['ID'],
                      bib['title'],
@@ -259,7 +267,7 @@ def write_bibs(bibfile=None,
                bibliographystyle='plain',
                outfile_name=None,
                since_year=None,
-               number_citations=10,
+               number_citations=None,
                bibtex_type=('articles'),
                write_over=False,
                authorname=None,
@@ -281,7 +289,7 @@ def write_bibs(bibfile=None,
     since_year : integer (optional)
         year of oldest citation to include. Default: All years.
     number_citations : integer (optional)
-        maximum number of citations to include.
+        maximum number of citations to include. Default: all.
     entrytypes : tuple of strings (optional)
         list of types of entries to include. Default: ('articles')
     authorname : string (optional)
@@ -295,6 +303,13 @@ def write_bibs(bibfile=None,
         Overwrite results files? Default: False
 
     """
+    if '.bib' in outfile_name:
+        print('I refuse to write over a bib file. '
+              + 'While this software comes with no warrantee, '
+              + "I'm also not going to knowlingly cause you damage. "
+              + 'Please choose a more sensible output file name.')
+        return
+
     if bibfile is None:
         print('You must include a bibfile path with full name.')
         print('')
@@ -329,9 +344,19 @@ def write_bibs(bibfile=None,
     # No output file specified
     if outfile_name is None:
         outfile_name = bibfilenameroot + '.html'
-        outfile = os.path.join(path, outfile_name)
+        outfile_name = os.path.join(path, outfile_name)
 
-    path_output = os.path.dirname(outfile_name)
+    if os.path.dirname(outfile_name) is '':
+        path_output = path
+    else:
+        path_output = os.path.dirname(outfile_name)
+
+    if not os.path.isdir(path_output) and path_output is not '':
+        print('Specified output path:')
+        print(path_output)
+        print('is not a valid path. Please play again.')
+        return
+
     filename_output = os.path.basename(outfile_name)
     root_output = filename_output[:filename_output.find('.')]
 
@@ -340,7 +365,7 @@ def write_bibs(bibfile=None,
     formattedbibs, bibs = formatted_bibs(bibfile,
                                          bibliographystyle=bibliographystyle)
 
-    bibs = merge_formatted_into_db(formattedbibs, bibfile)
+    bibs = merge_formatted_into_db(formattedbibs, bibs=bibs)
 
     # Keep only bibs by chosen author.
     if authorname is not None:
@@ -357,17 +382,16 @@ def write_bibs(bibfile=None,
 
     # 2. Truncate older articles
     if since_year is not None:
-        bibs_truncated = [bib for bib in bibs_sorted if bib[0] >= since_year]
+        bibs_truncated = [bib for bib in bibs_sorted if int(bib[0]) >= since_year]
     else:
         bibs_truncated = bibs_sorted
 
     # 4. Truncate beyond numberself.
 
-    if number_citations is not None:
+    if number_citations is not None and number_citations < len(bibs_truncated):
         bibs_final = bibs_truncated[:number_citations]
     else:
         bibs_final = bibs_truncated
-
 
     cwd = os.getcwd()
 
@@ -383,7 +407,9 @@ def write_bibs(bibfile=None,
         for bib in bibs_final:
             filename.write(bib[4])
             filename.write('\n')
+            filename.write('\n')
 
+    # Store old version of formatted references.
     if os.path.isfile(filename_output) and not overwrite:
         os.rename(filename_output,
                   filename_output[:filename_output.find('.')]
@@ -391,15 +417,13 @@ def write_bibs(bibfile=None,
                   + filename_output[filename_output.find('.'):])
 
     if standalone:
-        pandocstring = ("pandoc -s "
-                        + outfile_name_tex
-                        + " -o "
-                        + filename_output)
-    else:
-        pandocstring = ("pandoc "
-                        + outfile_name_tex
-                        + " -o "
-                        + filename_output)
+        pandoc_args = ' -s '
+
+    pandocstring = ("pandoc "
+                    + pandoc_args
+                    + outfile_name_tex
+                    + " -o "
+                    + filename_output)
 
     os.system(pandocstring)
     os.chdir(cwd)
