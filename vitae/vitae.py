@@ -265,7 +265,8 @@ def write_bibs(bibfile=None,
                authorname=None,
                outputformat=None,
                silent=False,
-               standalone=True):
+               standalone=True,
+               overwrite=False):
     """Write formatted bibs from bibfile to desired format.
 
     Parameters
@@ -290,6 +291,8 @@ def write_bibs(bibfile=None,
     standalone : Boolean (optional)
         By default, pandoc generates only a fragment. If you want a full
         document set this to False. Default: True
+    overwrite : Boolean (optional)
+        Overwrite results files? Default: False
 
     """
     if bibfile is None:
@@ -328,6 +331,10 @@ def write_bibs(bibfile=None,
         outfile_name = bibfilenameroot + '.html'
         outfile = os.path.join(path, outfile_name)
 
+    path_output = os.path.dirname(outfile_name)
+    filename_output = os.path.basename(outfile_name)
+    root_output = filename_output[:filename_output.find('.')]
+
     # Format the bibs. We just format every one in the file, then use what we
     # must later.
     formattedbibs, bibs = formatted_bibs(bibfile,
@@ -361,23 +368,39 @@ def write_bibs(bibfile=None,
     else:
         bibs_final = bibs_truncated
 
-    # routine to write out bibs_final bibsfinalfilenams
-    print(bibsfinal not written. bibsfinal.tex)
 
     cwd = os.getcwd()
 
-    if outfile_name is None:
-        outfile_name = bibfilenameroot + '.html'
-        os.chdir(path)
-    else:
-        path = os.path.dirname(outfile_name)
-        outfile_name = os.path.basename(outfile_name)
-        os.chdir(path)
+    os.chdir(path_output)
+
+    outfile_name_tex = root_output + '.tex'
+
+    if os.path.isfile(outfile_name_tex) and not overwrite:
+        os.rename(outfile_name_tex, outfile_name_tex[:-4]+'_old.tex')
+
+    # routine to write out bibs_final bibsfinalfilename
+    with open(outfile_name_tex, 'w') as filename:
+        for bib in bibs_final:
+            filename.write(bib[4])
+            filename.write('\n')
+
+    if os.path.isfile(filename_output) and not overwrite:
+        os.rename(filename_output,
+                  filename_output[:filename_output.find('.')]
+                  + '_old'
+                  + filename_output[filename_output.find('.'):])
 
     if standalone:
-        pandocstring = "pandoc -s " + bibsfinalfilename + " -o " + outfile_name
+        pandocstring = ("pandoc -s "
+                        + outfile_name_tex
+                        + " -o "
+                        + filename_output)
     else:
-        pandocstring = "pandoc " + bibsfinalfilename + " -o " + outfile_name
+        pandocstring = ("pandoc "
+                        + outfile_name_tex
+                        + " -o "
+                        + filename_output)
+
     os.system(pandocstring)
     os.chdir(cwd)
     # 5. Write to file, but check if it exists and store it somehow.
