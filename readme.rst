@@ -13,6 +13,19 @@ Purpose
 
 I hate formatting citations. It's tedious, and error-prone. Further, when I build my CV, I tend to muck it up and leave something out, mis-sort it, duplicate it accidentally, etc. So, I need a tool to do a better job with what ie a menial task.
 
+Install
+-------
+
+.. code::
+
+  pip install vitae
+
+or
+
+.. code::
+
+   pip install --user vitae
+   
 Usage
 -----
 
