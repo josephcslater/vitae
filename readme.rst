@@ -25,11 +25,11 @@ or
 .. code::
 
    pip install --user vitae
-   
+
 Usage
 -----
 
-Please see the brief `demo jupyter notebook`_. It's very brief. 
+Please see the brief `demo jupyter notebook`_. It's very brief.
 
 ``makemycv``
 ~~~~~~~~~~~~
@@ -120,7 +120,15 @@ Release notes:
 Future plans
 ------------
 
-1. Bug fixes when I find them. Any other suggestions?
+1. Preferences.
+
+  a. Reader (doesn't overwrite specified arguments)
+
+  b. Writer (configurator on call or when it doesn't exist)
+
+  c. Editor?
+
+2. Bug fixes when I find them. Any other suggestions?
 
 What else would be nice?
 
