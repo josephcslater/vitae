@@ -13,7 +13,8 @@ def makemycv(filename='cv.bib',
                          'techreport', 'inproceedings'),
              writeout=True,
              indent='   ',
-             author=None):
+             author=None,
+             outpath=None):
     r"""Create sub-bib TeX files for including into CV.
 
     Parameters
@@ -29,6 +30,8 @@ def makemycv(filename='cv.bib',
         string of spaces for prettying up the item lists
     author : string (unimplemented)
         select authors whose entries should be included.
+    outpath : string
+        output path to write files to.
 
     Returns
     -------
@@ -44,6 +47,12 @@ def makemycv(filename='cv.bib',
     """
     if os.path.isfile(filename) is False:
         print('{} is not an actual bib file.')
+        return
+
+    if outpath is None:
+        outpath = ''
+
+    if not os.path.isdir(outpath):
         return
 
     parser = BibTexParser()
@@ -79,7 +88,7 @@ def makemycv(filename='cv.bib',
             file_contents += indent + '\\item \\bibentry{' + entry[1] + '}\n'
         file_contents += '\\end{enumerate}'
         if writeout is True:
-            file = open(entrytype + '.tex', 'w')
+            file = open(os.path.join(outpath, entrytype + '.tex'), 'w')
 
             file.write(file_contents)
             file.close()
@@ -284,7 +293,9 @@ def write_bibs(bibfile=None,
                outputformat=None,
                silent=False,
                standalone=True,
-               overwrite=False):
+               overwrite=False
+               outfile=None):
+    print('need outfile')
     """Write formatted bibs from bibfile to desired format.
 
     Parameters
