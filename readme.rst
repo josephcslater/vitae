@@ -29,7 +29,7 @@ or
 Usage
 -----
 
-Please see the brief `demo jupyter notebook`_. It's very brief.
+Please see the brief `demo jupyter notebook`_. It's very brief. I need to add more. The whole package is basically two functions. Please read the help:
 
 ``makemycv``
 ~~~~~~~~~~~~
@@ -58,14 +58,27 @@ Then put:
 
 where you want articles listed, etc.
 
-Then, with your maintained .bib file, in the same location as your cv (for now), open a python terminal,
+Then, with your maintained `.bib` file, in the same location as your cv (for now), and **within the same directory as your cv and cv.bib file** open a python terminal and type.
 
 .. code::
 
   >>> import vitae
   >>> vitae.makemycv()
 
-will make your ``article.tex`` file along with the other defaults (see the help on ``makemycv``).
+Alternatively, you can type::
+
+  > python -c  "import vitae; vitae.makemycv()"
+
+in your terminal (Anaconda Terminal if you are using Anaconda Python on Windows).
+
+This will make your ``article.tex`` file along with the other defaults (see the help on ``makemycv``).
+
+Note that that are a ton of options for ``makemycv``. Please use::
+
+  >>> import vitae
+  >>> help(vitae.makemycv)
+
+To see how to tweak it to your needs.
 
 If you try ``vitae``, please understand:
 
@@ -74,8 +87,6 @@ b. Please provide your feedback.
 c. Please help! I can use help with additional portions.
 
 If you don't use LaTeX, this isn't easy enough for you yet. It's a long ways away. However, texblog_ has a decent start in writing a `Résumé in LaTeX`_ . It *doesn't* include the paper inclusion trick being used by ``vitae``.
-
- "Other documents" is making some progress. It will look like zero until it's live because I'm adding partial functionality as I can (see github logs), but the whole thing is needed for it to be useful.
 
 ``write_bibs``
 ~~~~~~~~~~~~~~
@@ -92,16 +103,24 @@ For instance:
 
 .. code::
 
-  vitae.write_bibs(bibfile = '/Users/jslater/Documents/Resumes/cv.bib',
-                    bibliographystyle='aiaa',
-                    outfile_name='try.html',
-                    since_year=2008)
+  >>> import vitae
+  >>> vitae.write_bibs(bibfile = '/Users/jslater/Documents/Resumes/cv.bib',
+                       bibliographystyle='aiaa',
+                       outfile_name='try.html',
+                       since_year=2008)
+
+Alternatively, from a command line::
+
+  > python -c  "import vitae; vitae.write_bibs(bibfile='cv.bib',
+                                               bibliographystyle='aiaa',
+                                               outfile_name = 'bibs.html',
+                                               since_year=2008)"
 
 Summary
 -------
 Please see the full help on each function.
 
-It's on ``pypi``, but you can pip install the latest, and possibly non-working, version right now from github (I love bug reports!):
+Vitae is on pypi_ but you can pip install the latest, and possibly non-working, version right now from github (I love bug reports!):
 
 .. code::
 
@@ -109,6 +128,13 @@ It's on ``pypi``, but you can pip install the latest, and possibly non-working, 
 
 Release notes:
 --------------
+
+1.0.1: Numerous minor fixes:
+
+- ``write_bibs`` failed when path not explicitly included.
+- Quieted latex output.
+- Moved to luatex_ to enable unicode characters.
+- Readme updated to reflect terminal usage.
 
 1.0.0: You can now convert your bib citations to any format that pandoc_ can handle. I think.
 
@@ -133,6 +159,7 @@ Future plans
 What else would be nice?
 
 .. _pandoc: http://pandoc.org
+.. _luatex: http://www.luatex.org
 .. _texblog: https://texblog.org
 .. _`Résumé in LaTeX`: https://texblog.org/2012/04/25/writing-a-cv-in-latex/
 .. _`LaTeX`: https://www.latex-tutorial.com/installation/
@@ -140,3 +167,4 @@ What else would be nice?
 .. _jupyter: https://www.jupyter.org
 .. _Makefile: https://www.gnu.org/software/make/manual/html_node/Introduction.html
 .. _`demo jupyter notebook`: https://github.com/josephcslater/vitae/blob/master/BibConvert.ipynb
+.. _pypi: https://pypi.org/project/vitae/
