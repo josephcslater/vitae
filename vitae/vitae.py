@@ -5,6 +5,7 @@ import tempfile
 from bibtexparser.bparser import BibTexParser
 from bibtexparser.customization import homogenize_latex_encoding
 import os
+from pathlib import Path
 
 
 def makemycv(filename='cv.bib',
@@ -13,8 +14,13 @@ def makemycv(filename='cv.bib',
                          'techreport', 'inproceedings'),
              writeout=True,
              indent='   ',
-             author=None):
-    r"""Create sub-bib TeX files for including into CV.
+             author=None,
+             outpath=None):
+    r"""Create sub-bib TeX files for including into CV.abs
+
+    Written files with be names `entrytype```.tex`` to the current directory
+    if `outpath` is not defined. The files `entrytype```.tex`` will overwrite
+    files with the same name **without warning**.
 
     Parameters
     ----------
@@ -29,6 +35,8 @@ def makemycv(filename='cv.bib',
         string of spaces for prettying up the item lists
     author : string (unimplemented)
         select authors whose entries should be included.
+    outpath : string
+        output path to write files to.
 
     Returns
     -------
@@ -41,9 +49,26 @@ def makemycv(filename='cv.bib',
 
     https://nwalsh.com/tex/texhelp/bibtx-7.html
 
+    Examples
+    --------
+    Makes tex files for inclusion in cv.tex (articles.tex, etc.).
+    See readme.rts on github.com
+    >>> import vitae
+    >>> vitae.makemycv(filename='cv.bib')
+
+    Alternatively from a terminal prompt:
+    > python -c  "import vitae; vitae.makemycv(filename='cv.bib')"
+
     """
     if os.path.isfile(filename) is False:
         print('{} is not an actual bib file.')
+        return
+
+    if outpath is None:
+        outpath = ''
+
+    if not os.path.isdir(outpath) and outpath is not '':
+        print(outpath, ' is not a valid directory.')
         return
 
     parser = BibTexParser()
@@ -79,7 +104,7 @@ def makemycv(filename='cv.bib',
             file_contents += indent + '\\item \\bibentry{' + entry[1] + '}\n'
         file_contents += '\\end{enumerate}'
         if writeout is True:
-            file = open(entrytype + '.tex', 'w')
+            file = open(os.path.join(outpath, entrytype + '.tex'), 'w')
 
             file.write(file_contents)
             file.close()
@@ -228,7 +253,7 @@ def formatted_bibs(bibfile, bibliographystyle='plain'):
             \end{document}""")
             template.write(template_head)
             _, _, bibs = makemycv(filename=bibfile, silent=True)
-        os.system("pdflatex cv_temp; bibtex cv_temp")
+        os.system('lualatex -interaction="batchmode" cv_temp; bibtex cv_temp')
 
         # print(os.path.join(tmpdirname, 'cv_temp.bbl'))
         formattedbibs = read_bbl('cv_temp.bbl')
@@ -279,7 +304,6 @@ def write_bibs(bibfile=None,
                since_year=None,
                number_citations=None,
                bibtex_type=('articles'),
-               write_over=False,
                authorname=None,
                outputformat=None,
                silent=False,
@@ -312,6 +336,22 @@ def write_bibs(bibfile=None,
     overwrite : Boolean (optional)
         Overwrite results files? Default: False
 
+    Examples
+    --------
+    To write citations to an html file:
+    >>> import vitae
+    >>> vitae.write_bibs(bibfile = '/Users/jslater/Documents/Resumes/cv.bib',
+                      bibliographystyle='plain',
+                      outfile_name='try.html',
+                      since_year=2008)
+
+    Alternatively, from a terminal prompt:
+    > python -c  "import vitae; vitae.write_bibs(bibfile='cv.bib',
+                                                 bibliographystyle='plain',
+                                                 outfile_name = 'bibs.html',
+                                                 since_year=2008)"
+
+
     """
     if '.bib' in outfile_name:
         print('I refuse to write over a bib file. '
@@ -321,7 +361,9 @@ def write_bibs(bibfile=None,
         return
 
     if bibfile is None:
-        print('You must include a bibfile path with full name.')
+        print('You must include the input named argument: bibfile')
+        print('This should include with full name with path.')
+        print('If the path is not included, cwd will be presumed.')
         print('')
         print('On Mac or Linux, this looks like:')
         print('\'/Users/myusername/Documents/CVs/cv.bib\'')
@@ -348,6 +390,11 @@ def write_bibs(bibfile=None,
         return
 
     path = os.path.dirname(bibfile)
+
+    if path is '':
+        path = os.getcwd()
+        bibfile = os.path.join(path, bibfile)
+
     bibfilename = os.path.basename(bibfile)
     bibfilenameroot = bibfilename[:-4]
 
@@ -422,13 +469,20 @@ def write_bibs(bibfile=None,
 
     # Store old version of formatted references.
     if os.path.isfile(filename_output) and not overwrite:
+        print('\n\n',
+              filename_output,
+              'moved to',
+              filename_output[:filename_output.find('.')]
+              + '_old'
+              + filename_output[filename_output.find('.'):],
+              '\n\n')
         os.rename(filename_output,
                   filename_output[:filename_output.find('.')]
                   + '_old'
                   + filename_output[filename_output.find('.'):])
 
     if standalone:
-        pandoc_args = ' -s '
+        pandoc_args = ' -s -V "pagetitle:My Bibs" -V "title:My Bibs" '
 
     pandocstring = ("pandoc "
                     + pandoc_args
@@ -438,5 +492,7 @@ def write_bibs(bibfile=None,
 
     os.system(pandocstring)
     os.chdir(cwd)
-    # 5. Write to file, but check if it exists and store it somehow.
-    # 6. Apply pandoc
+
+
+if __name__ == '__main__':
+    print('executing from command line')
