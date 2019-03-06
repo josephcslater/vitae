@@ -129,7 +129,7 @@ Vitae is on pypi_ but you can pip install the latest, and possibly non-working, 
 Release notes:
 --------------
 
-1.0.1: Numerous minor fixes:
+1.1.0: Numerous minor fixes:
 
 - ``write_bibs`` failed when path not explicitly included.
 - Quieted latex output.
