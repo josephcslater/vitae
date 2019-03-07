@@ -6,7 +6,7 @@
 vitae
 =====
 
-A Python module for building curriculum vitae and other documents from a ``bibtex`` file. ``vitae`` leverages bibtexparser_, `LaTeX`_, and pandoc_ to streamline getting citations of your papers into the formats you need quickly without manual intervention. Of course, with many settings, it can be a bit tedious. I personally recommend setting up a jupyter_ notebook with the commands you regularly execute available there. Alternatively, you can call it from scripts or create a Makefile_, I'll be doing both for myself.
+A Python module for building curriculum vitae and other documents from a ``bibtex`` file. ``vitae`` leverages bibtexparser_, `LaTeX`_, and pandoc_ to streamline getting citations of your papers into the formats you need quickly without manual intervention. Of course, with many settings, it can be a bit tedious. I personally recommend setting up a jupyter_ notebook with the commands you regularly execute available there. Alternatively, you can call it from the terminal which allows it to work inside a more complex workflow.
 
 Purpose
 -------
@@ -125,6 +125,12 @@ Vitae is on pypi_ but you can pip install the latest, and possibly non-working, 
 .. code::
 
   pip install git+https://github.com/josephcslater/vitae
+
+Help
+----
+``vitae`` uses luatex_ to enable unicode characters. On Ubuntu, the base tetex install doesn't include the necessary file ``luaotfload``. To resolve this open a terminal and type::
+
+  sudo apt install texlive-luatex
 
 Release notes:
 --------------
