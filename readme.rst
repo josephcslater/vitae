@@ -6,7 +6,7 @@
 vitae
 =====
 
-A Python module for building curriculum vitae and other documents from a ``bibtex`` file. ``vitae`` leverages bibtexparser_, `LaTeX`_, and pandoc_ to streamline getting citations of your papers into the formats you need quickly without manual intervention. Of course, with many settings, it can be a bit tedious. I personally recommend setting up a JuPyter_ notebook with the commands you regularly execute available there. Alternatively, you can call it from the terminal which allows it to work inside a more complex workflow.
+A Python module for building curriculum vitae and other documents from a ``bibtex`` file. ``vitae`` leverages bibtexparser_, `LaTeX`_, and pandoc_ to streamline getting citations of your papers into the formats you need quickly without manual intervention. Of course, with many settings, it can be a bit tedious. I personally recommend setting up a Jupyter_ notebook with the commands you regularly execute available there. Alternatively, you can call it from the terminal which allows it to work inside a more complex workflow.
 
 Purpose
 -------
@@ -29,7 +29,7 @@ or
 Usage
 -----
 
-Please see the brief `demo JuPyter notebook`_. It's very brief. I need to add more. The whole package is basically two functions. Please read the help:
+Please see the brief `demo Jupyter notebook`_. It's very brief. I need to add more. The whole package is basically two functions. Please read the help:
 
 ``makemycv``
 ~~~~~~~~~~~~
@@ -170,7 +170,7 @@ What else would be nice?
 .. _`Résumé in LaTeX`: https://texblog.org/2012/04/25/writing-a-cv-in-latex/
 .. _`LaTeX`: https://www.latex-tutorial.com/installation/
 .. _bibtexparser: https://bibtexparser.readthedocs.io/en/master/
-.. _JuPyter: https://www.jupyter.org
+.. _Jupyter: https://www.Jupyter.org
 .. _Makefile: https://www.gnu.org/software/make/manual/html_node/Introduction.html
-.. _`demo JuPyter notebook`: https://github.com/josephcslater/vitae/blob/master/Vitae.ipynb
+.. _`demo Jupyter notebook`: https://github.com/josephcslater/vitae/blob/master/Vitae.ipynb
 .. _pypi: https://pypi.org/project/vitae/
