@@ -172,5 +172,5 @@ What else would be nice?
 .. _bibtexparser: https://bibtexparser.readthedocs.io/en/master/
 .. _jupyter: https://www.jupyter.org
 .. _Makefile: https://www.gnu.org/software/make/manual/html_node/Introduction.html
-.. _`demo jupyter notebook`: https://github.com/josephcslater/vitae/blob/master/BibConvert.ipynb
+.. _`demo jupyter notebook`: https://github.com/josephcslater/vitae/Vitae.ipynb
 .. _pypi: https://pypi.org/project/vitae/
