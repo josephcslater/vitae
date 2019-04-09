@@ -116,6 +116,25 @@ Alternatively, from a command line::
                                                outfile_name = 'bibs.html',
                                                since_year=2008)"
 
+How I use it
+------------
+
+I have a Makefile that I use for tasks that I am creating. The first is a simple one for building my cv, the contents of which are::
+
+	help:
+		@echo "Please use \`make <target>' where <target> is one of"
+		@echo "  cv         to make standard pdf cv"
+		@echo "  pdf        see cv"
+
+	cv:
+			python -c  'import vitae; vitae.makemycv(silent = True)'
+		  pdflatex cv
+			bibtex cv
+			pdflatex cv
+
+	pdf:
+			cv
+
 Summary
 -------
 Please see the full help on each function.
@@ -137,7 +156,7 @@ Release notes:
 
 1.1.1: Included test bib file that can easily be accessed from notebook.
        Corrected incorrect help in makemycv
-       Minor non-functional corrections. 
+       Minor non-functional corrections.
 
 
 1.1.0: Numerous minor fixes:
