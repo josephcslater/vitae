@@ -9,7 +9,7 @@ from pathlib import Path
 
 
 def makemycv(filename='cv.bib',
-             silent=False,
+             silent=True,
              entrytypes=('inbook', 'article', 'periodical',
                          'techreport', 'inproceedings'),
              writeout=True,
@@ -33,10 +33,12 @@ def makemycv(filename='cv.bib',
         Write to files. If false, only write to screenself.
     indent : string
         string of spaces for prettying up the item lists
-    author : string (unimplemented)
+    author : string
         select authors whose entries should be included.
     outpath : string
         output path to write files to.
+    silent : boolean (optional: default True)
+        print results to screen
 
     Returns
     -------
@@ -61,7 +63,7 @@ def makemycv(filename='cv.bib',
 
     """
     if os.path.isfile(filename) is False:
-        print('{} is not an actual bib file.')
+        print('{} is not an actual bib file.'.format(filename))
         return
 
     if outpath is None:

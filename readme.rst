@@ -135,6 +135,11 @@ Help
 Release notes:
 --------------
 
+1.1.1: Included test bib file that can easily be accessed from notebook.
+       Corrected incorrect help in makemycv
+       Minor non-functional corrections. 
+
+
 1.1.0: Numerous minor fixes:
 
 - ``write_bibs`` failed when path not explicitly included.
