@@ -10,12 +10,13 @@ from pathlib import Path
 
 def makemycv(filename='cv.bib',
              silent=True,
-             entrytypes=('inbook', 'article', 'periodical',
-                         'techreport', 'inproceedings'),
+             bibtex_types=('inbook', 'article', 'periodical',
+                          'techreport', 'inproceedings'),
              writeout=True,
              indent='   ',
              author=None,
-             outpath=None):
+             outpath=None,
+             entrytypes=None):
     r"""Create sub-bib TeX files for including into CV.abs
 
     Written files with be names `entrytype```.tex`` to the current directory
@@ -26,8 +27,8 @@ def makemycv(filename='cv.bib',
     ----------
     filename : string (optional: default cv.tex)
         Name (including optional path) of bib file containing citation entries
-    entrytypes : tuple of strings (optional)
-        List of bibtex entrytypes to generate \bibentry .tex files for.
+    bibtex_types : tuple of strings (optional)
+        List of bibtex bibtex_types to generate \bibentry .tex files for.
         Files will be be named  `entrytype```.tex``
     writeout : boolean (optional: default True)
         Write to files. If false, only write to screenself.
@@ -62,6 +63,11 @@ def makemycv(filename='cv.bib',
     > python -c  "import vitae; vitae.makemycv(filename='cv.bib')"
 
     """
+    if entrytypes is not None:
+        print('entrytypes will be deprecated in future releases.')
+        print('Please use bibtex_types')
+        bibtex_types = entrytypes
+
     if os.path.isfile(filename) is False:
         print('{} is not an actual bib file.'.format(filename))
         return
@@ -87,7 +93,7 @@ def makemycv(filename='cv.bib',
 
     results = {}
 
-    for entrytype in entrytypes:
+    for entrytype in bibtex_types:
         entry = [[bib['year'], bib['ID'], bib['title']]
                  for bib in bibs if bib['ENTRYTYPE'] == entrytype]
 
@@ -115,7 +121,7 @@ def makemycv(filename='cv.bib',
 
         results[entrytype] = file_contents
 
-    unaccounted = [bib for bib in bibs if bib['ENTRYTYPE'] not in entrytypes]
+    unaccounted = [bib for bib in bibs if bib['ENTRYTYPE'] not in bibtex_types]
 
     if silent is False:
         print('Unaccounted for entries is {}:'.format(len(unaccounted)))
@@ -305,7 +311,7 @@ def write_bibs(bibfile=None,
                outfile_name=None,
                since_year=None,
                number_citations=None,
-               bibtex_type=('articles'),
+               bibtex_types=('articles'),
                authorname=None,
                outputformat=None,
                silent=False,
@@ -326,7 +332,7 @@ def write_bibs(bibfile=None,
         year of oldest citation to include. Default: All years.
     number_citations : integer (optional)
         maximum number of citations to include. Default: all.
-    entrytypes : tuple of strings (optional)
+    bibtex_types : tuple of strings (optional)
         list of types of entries to include. Default: ('articles')
     authorname : string (optional)
         author whos papers to include. Default: all.
@@ -433,8 +439,8 @@ def write_bibs(bibfile=None,
     # At this point, we have a bibs database with just bibs by authorname
     # Next steps:
 
-    # 3. Truncate non-desired entrytypes
-    bibs = [bib for bib in bibs if bib[3] in bibtex_type]
+    # 3. Truncate non-desired bibtex_types
+    bibs = [bib for bib in bibs if bib[3] in bibtex_types]
 
     # Sort by date
     bibs_sorted = sorted(bibs, key=lambda paper: paper[0], reverse=True)
