@@ -154,6 +154,8 @@ Help
 Release notes:
 --------------
 
+1.1.3: Work-around for pandoc_ failure to convert ``{\em`` correctly.
+
 1.1.2: Unify name of ``bibtex_types`` and ``entrytypes``. Will issue a warning
        if you incorrectly use ``entrytypes``, but will still work.
 

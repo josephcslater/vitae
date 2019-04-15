@@ -9,7 +9,7 @@ Joseph C. Slater
 """
 
 __title__ = 'vitae'
-__version__ = '1.1.2'
+__version__ = '1.1.3'
 __author__ = u'Joseph C. Slater'
 __license__ = 'BSD3'
 __copyright__ = 'Copyright 2018 Joseph C. Slater'

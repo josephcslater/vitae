@@ -475,6 +475,12 @@ def write_bibs(bibfile=None,
             filename.write('\n')
             filename.write('\n')
 
+    with open(outfile_name_tex) as f:
+        newText = f.read().replace('{\\em', '\\emph{')
+
+    with open(outfile_name_tex, "w") as f:
+        f.write(newText)
+
     # Store old version of formatted references.
     if os.path.isfile(filename_output) and not overwrite:
         print('\n\n',
