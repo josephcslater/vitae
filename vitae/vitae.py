@@ -11,7 +11,7 @@ from pathlib import Path
 def makemycv(filename='cv.bib',
              silent=True,
              bibtex_types=('inbook', 'article', 'periodical',
-                          'techreport', 'inproceedings'),
+                           'techreport', 'inproceedings'),
              writeout=True,
              indent='   ',
              author=None,
@@ -75,7 +75,7 @@ def makemycv(filename='cv.bib',
     if outpath is None:
         outpath = ''
 
-    if not os.path.isdir(outpath) and outpath is not '':
+    if not os.path.isdir(outpath) and outpath != '':
         print(outpath, ' is not a valid directory.')
         return
 
@@ -150,8 +150,9 @@ def by_author(authorname, bibs):
                        + ', '
                        + an[an.find(',')+1])
 
-    for bib in bibs:
+    print('number of bibs', len(bibs))
 
+    for bib in bibs:
         if 'author' in bib:
             bibauthor = bib['author']
             bibauthor = bibauthor.replace(',', ', ')
@@ -278,6 +279,7 @@ def is_tool(name):
 
 def merge_formatted_into_db(formattedbibs, bibfilename=None, bibs=None):
     """Create bib database including formated bibs."""
+    print('formattedbibs length', len(formattedbibs))
     if bibs is None:
         if bibfilename is None:
             print('No bib file name given.')
@@ -292,7 +294,7 @@ def merge_formatted_into_db(formattedbibs, bibfilename=None, bibs=None):
         parser.ignore_nonstandard_types = False
 
         with open(bibfilename) as bibtex_file:
-            bib_database = bibtexparser.load(bibtex_file, parser)
+            bib_database = bibtexparser.load(bibtex_file, parser, encoding='utf-8')
 
         bibs = bib_database.entries
 
@@ -302,7 +304,7 @@ def merge_formatted_into_db(formattedbibs, bibfilename=None, bibs=None):
                      bib['ENTRYTYPE'],
                      formattedbibs[bib['ID']]]
                     for bib in bibs if bib['ID'] in formattedbibs.keys()]
-
+    print('bib_database formatted', len(bib_database))
     return bib_database
 
 
@@ -399,7 +401,7 @@ def write_bibs(bibfile=None,
 
     path = os.path.dirname(bibfile)
 
-    if path is '':
+    if path == '':
         path = os.getcwd()
         bibfile = os.path.join(path, bibfile)
 
@@ -411,25 +413,32 @@ def write_bibs(bibfile=None,
         outfile_name = bibfilenameroot + '.html'
         outfile_name = os.path.join(path, outfile_name)
 
-    if os.path.dirname(outfile_name) is '':
+    if os.path.dirname(outfile_name) == '':
         path_output = path
     else:
         path_output = os.path.dirname(outfile_name)
 
-    if not os.path.isdir(path_output) and path_output is not '':
+    if not os.path.isdir(path_output) and path_output != '':
         print('Specified output path:')
         print(path_output)
         print('is not a valid path. Please play again.')
         return
 
     filename_output = os.path.basename(outfile_name)
-    root_output = filename_output[:filename_output.find('.')]
+
+    root_output = filename_output
+
+    if '.' in filename_output:
+        root_output = filename_output[:filename_output.find('.')]
+
+    print(root_output)
 
     # Format the bibs. We just format every one in the file, then use what we
     # must later.
     formattedbibs, bibs = formatted_bibs(bibfile,
                                          bibliographystyle=bibliographystyle)
 
+    print('result of formatting bibs', len(formattedbibs))
     bibs = merge_formatted_into_db(formattedbibs, bibs=bibs)
 
     # Keep only bibs by chosen author.
@@ -494,6 +503,8 @@ def write_bibs(bibfile=None,
                   filename_output[:filename_output.find('.')]
                   + '_old'
                   + filename_output[filename_output.find('.'):])
+
+    pandoc_args = ' '
 
     if standalone:
         pandoc_args = ' -s -V "pagetitle:My Bibs" -V "title:My Bibs" '
