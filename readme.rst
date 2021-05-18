@@ -11,7 +11,7 @@ A Python module for building curriculum vitae and other documents from a ``BibTe
 Purpose
 -------
 
-I hate formatting citations. It's tedious, and error-prone. Further, when I build my CV, I tend to muck it up and leave something out, mis-sort it, duplicate it accidentally, etc. So, I need a tool to do a better job with what ie a menial task.
+I hate formatting citations. It's tedious, and error-prone. Further, when I build my CV, I tend to muck it up and leave something out, mis-sort it, duplicate it accidentally, etc. So, I need a tool to do a better job with what is a menial task.
 
 Install
 -------
