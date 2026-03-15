@@ -127,13 +127,13 @@ I have a Makefile that I use for tasks that I am creating. The first is a simple
 		@echo "  pdf        see cv"
 
 	cv:
-			python -c  'import vitae; vitae.makemycv(silent = True)'
-		  pdflatex cv
-			bibtex cv
-			pdflatex cv
+		python -c  'import vitae; vitae.makemycv(silent = True)'
+		pdflatex cv
+		bibtex cv
+		pdflatex cv
 
 	pdf:
-			cv
+		cv
 
 Summary
 -------
