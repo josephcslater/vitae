@@ -154,7 +154,8 @@ Help
 Release notes:
 --------------
 
-See the CHANGELOG_ for the full history of releases.
+See the CHANGELOG_ for the full history of releases. If you are a
+maintainer looking to cut a new release, see RELEASING_.
 
 Future plans
 ------------
@@ -172,6 +173,7 @@ Future plans
 What else would be nice?
 
 .. _CHANGELOG: https://github.com/josephcslater/vitae/blob/master/CHANGELOG.rst
+.. _RELEASING: https://github.com/josephcslater/vitae/blob/master/RELEASING.md
 .. _pandoc: http://pandoc.org
 .. _luatex: http://www.luatex.org
 .. _texblog: https://texblog.org
