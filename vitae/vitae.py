@@ -58,7 +58,7 @@ def makemycv(filename='cv.bib',
     Makes tex files for inclusion in cv.tex (articles.tex, etc.).
     See readme.rts on github.com
     >>> import vitae
-    >>> vitae.makemycv(filename='cv.bib')
+    >>> vitae.makemycv(filename='cv.bib')  # doctest: +SKIP
 
     Alternatively from a terminal prompt:
     > python -c  "import vitae; vitae.makemycv(filename='cv.bib')"
@@ -360,9 +360,9 @@ def write_bibs(bibfile=None,
     To write citations to an html file:
     >>> import vitae
     >>> vitae.write_bibs(bibfile = '/Users/jslater/Documents/Resumes/cv.bib',
-                      bibliographystyle='plain',
-                      outfile_name='try.html',
-                      since_year=2008)
+    ...                   bibliographystyle='plain',
+    ...                   outfile_name='try.html',
+    ...                   since_year=2008)  # doctest: +SKIP
 
     Alternatively, from a terminal prompt:
     > python -c  "import vitae; vitae.write_bibs(bibfile='cv.bib',
