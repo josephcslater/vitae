@@ -14,7 +14,7 @@ authors = [
 keywords = ["curriculum vitae", "academia", "cv", "resume"]
 requires-python = ">=3.5"
 dependencies = [
-    "bibtexparser",
+    "bibtexparser<2",
     "appdirs",
 ]
 

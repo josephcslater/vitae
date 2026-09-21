@@ -1,6 +1,12 @@
 Changelog
 =========
 
+1.2.1: Fix broken installs caused by bibtexparser 2.x:
+
+- Pin ``bibtexparser<2`` in dependencies. bibtexparser 2.0 removed the
+  ``bibtexparser.bparser`` module that ``vitae`` relies on, so unpinned
+  installs picked up the incompatible release and failed to import.
+
 1.2.0: Modernized packaging:
 
 - Migrated from ``setup.py``/``setup.cfg`` (distutils/legacy setuptools) to

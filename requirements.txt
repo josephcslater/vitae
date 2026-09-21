@@ -1,2 +1,2 @@
-bibtexparser
+bibtexparser<2
 appdirs
