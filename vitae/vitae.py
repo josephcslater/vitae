@@ -1,6 +1,7 @@
 """Create citation files from a bib file."""
 
 import bibtexparser
+import subprocess
 import tempfile
 from bibtexparser.bparser import BibTexParser
 from bibtexparser.customization import homogenize_latex_encoding
@@ -112,10 +113,8 @@ def makemycv(filename='cv.bib',
             file_contents += indent + '\\item \\bibentry{' + entry[1] + '}\n'
         file_contents += '\\end{enumerate}'
         if writeout is True:
-            file = open(os.path.join(outpath, entrytype + '.tex'), 'w')
-
-            file.write(file_contents)
-            file.close()
+            with open(os.path.join(outpath, entrytype + '.tex'), 'w') as file:
+                file.write(file_contents)
         else:
             print(file_contents)
 
@@ -262,7 +261,17 @@ def formatted_bibs(bibfile, bibliographystyle='plain'):
             \end{document}""")
             template.write(template_head)
             _, _, bibs = makemycv(filename=bibfile, silent=True)
-        os.system('lualatex -interaction="batchmode" cv_temp; bibtex cv_temp')
+
+        lualatex_result = subprocess.run(
+            ['lualatex', '-interaction=batchmode', 'cv_temp'])
+        if lualatex_result.returncode != 0:
+            print('lualatex failed to compile cv_temp.tex. '
+                  'Check the log for details.')
+
+        bibtex_result = subprocess.run(['bibtex', 'cv_temp'])
+        if bibtex_result.returncode != 0:
+            print('bibtex failed to process cv_temp.aux. '
+                  'Check the log for details.')
 
         # print(os.path.join(tmpdirname, 'cv_temp.bbl'))
         formattedbibs = read_bbl('cv_temp.bbl')
@@ -313,7 +322,7 @@ def write_bibs(bibfile=None,
                outfile_name=None,
                since_year=None,
                number_citations=None,
-               bibtex_types=('articles'),
+               bibtex_types=('articles',),
                authorname=None,
                outputformat=None,
                silent=False,
@@ -504,18 +513,19 @@ def write_bibs(bibfile=None,
                   + '_old'
                   + filename_output[filename_output.find('.'):])
 
-    pandoc_args = ' '
+    pandoc_args = []
 
     if standalone:
-        pandoc_args = ' -s -V "pagetitle:My Bibs" -V "title:My Bibs" '
+        pandoc_args = ['-s', '-V', 'pagetitle:My Bibs', '-V', 'title:My Bibs']
 
-    pandocstring = ("pandoc "
-                    + pandoc_args
-                    + outfile_name_tex
-                    + " -o "
-                    + filename_output)
+    pandoc_command = (['pandoc']
+                      + pandoc_args
+                      + [outfile_name_tex, '-o', filename_output])
 
-    os.system(pandocstring)
+    pandoc_result = subprocess.run(pandoc_command)
+    if pandoc_result.returncode != 0:
+        print('pandoc failed to convert {} to {}.'.format(
+            outfile_name_tex, filename_output))
     os.chdir(cwd)
 
 

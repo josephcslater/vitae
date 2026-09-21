@@ -154,28 +154,7 @@ Help
 Release notes:
 --------------
 
-1.1.3: Work-around for pandoc_ failure to convert ``{\em`` correctly.
-
-1.1.2: Unify name of ``bibtex_types`` and ``entrytypes``. Will issue a warning
-       if you incorrectly use ``entrytypes``, but will still work.
-
-1.1.1: Included test bib file that can easily be accessed from notebook.
-       Corrected incorrect help in ``makemycv``
-       Minor non-functional corrections.
-
-1.1.0: Numerous minor fixes:
-
-- ``write_bibs`` failed when path not explicitly included.
-- Quieted latex output.
-- Moved to luatex_ to enable unicode characters.
-- Readme updated to reflect terminal usage.
-
-1.0.0: You can now convert your bib citations to any format that pandoc_ can handle. I think.
-
-0.1.1: You can now select only ``bibentries`` by a defined author. Note that ``authornames`` are not always all that unique. You need to ensure that all ``authornames`` are perfect for the selected author. That means initials, etc. I hope to use fuzzywuzzy for this someday- it's a bit complicated and a judgement call.
-
-0.1.0: First release. It works, it's useful, it's not done, but it does what I needed it for. You can now use \\input statements with bibentry instead of typing your own citations by hand.
-
+See the CHANGELOG_ for the full history of releases.
 
 Future plans
 ------------
@@ -192,6 +171,7 @@ Future plans
 
 What else would be nice?
 
+.. _CHANGELOG: https://github.com/josephcslater/vitae/blob/master/CHANGELOG.rst
 .. _pandoc: http://pandoc.org
 .. _luatex: http://www.luatex.org
 .. _texblog: https://texblog.org
