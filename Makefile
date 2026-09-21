@@ -23,8 +23,8 @@ help:
 	@echo "  clean      to clear build files"
 	@echo "  test    		to test all docstring examples"
 	@echo "  cover      to test coverage (not working yet)"
-	@echo "  release    to edit version, build docs and release"
-	@echo "  wheel      build wheel file (for local use)"
+	@echo "  release    tag and push a release (PyPI publish runs via GitHub Actions)"
+	@echo "  wheel      build sdist and wheel file (for local use)"
 	@echo "  wheel-dist build wheel and push to github"
 	@echo "  docs       build docs using sphin"
 	@echo "  html       alias for docs"
@@ -46,28 +46,20 @@ cover: clean
 	coverage annotate
 
 release: clean
-	# pip install --user readme_renderer
-	#python setup.py check -r -s
-	# pytest
-	#python setup.py register
-	rm -rf dist &
-	python setup.py bdist_wheel
-	# python setup.py sdist
+	# Bump vitae/__init__.py __version__ before running this.
+	# PyPI publishing is handled by .github/workflows/publish.yml via
+	# PyPI Trusted Publishing when the tag below is pushed.
 	git tag v$(VERSION)
 	git push origin --all
 	git push origin --tags
-#	printf '\nUpgrade vibration toolbox with release and sha256 sum:'
-#	printf '\nOK, no sha256 sum yet:'
-	twine upload dist/*
-#	shasum -a 256 dist/*.tar.gz
 
 wheel:
 	rm -rf dist
-	python setup.py bdist_wheel
+	python -m build
 
 wheel-dist: gh-pages
 	rm -rf dist
-	python setup.py bdist_wheel
+	python -m build
 
 docs:
 	# Warnings become errors and stop build

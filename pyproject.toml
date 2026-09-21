@@ -1,0 +1,40 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "vitae"
+dynamic = ["version"]
+description = "Tools for academics for building a Curriculum Vitae and other oft-requested documents."
+readme = "readme.rst"
+license = { text = "BSD-3-Clause" }
+authors = [
+    { name = "Joseph C. Slater", email = "joseph.c.slater@gmail.com" },
+]
+keywords = ["curriculum vitae", "academia", "cv", "resume"]
+requires-python = ">=3.5"
+dependencies = [
+    "bibtexparser",
+    "appdirs",
+]
+
+[project.urls]
+Homepage = "https://github.com/josephcslater/vitae"
+Changelog = "https://github.com/josephcslater/vitae/blob/master/CHANGELOG.rst"
+
+[tool.hatch.version]
+path = "vitae/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["vitae"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"readme.rst" = "vitae/readme.rst"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/vitae",
+    "/readme.rst",
+    "/CHANGELOG.rst",
+    "/LICENSE",
+]

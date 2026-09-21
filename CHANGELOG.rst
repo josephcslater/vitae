@@ -1,6 +1,19 @@
 Changelog
 =========
 
+1.2.0: Modernized packaging:
+
+- Migrated from ``setup.py``/``setup.cfg`` (distutils/legacy setuptools) to
+  ``pyproject.toml`` with the ``hatchling`` build backend. Version is still
+  sourced from ``vitae/__init__.py``.
+- Removed ``setup.py`` and ``setup.cfg``.
+- Added GitHub Actions workflows:  ``.github/workflows/test.yml`` runs the
+  test suite on push/PR across supported Python versions, and
+  ``.github/workflows/publish.yml`` builds and publishes to PyPI via
+  Trusted Publishing (OIDC) whenever a ``v*`` tag is pushed, removing the
+  need for manually managed API tokens during release.
+- Updated ``Makefile`` release targets accordingly.
+
 1.1.4: Bug fixes and hardening:
 
 - Fixed ``write_bibs`` default ``bibtex_types=('articles')``, which was a
